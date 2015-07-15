@@ -1,0 +1,2218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The Color class &mdash; GrapeFruit 0.1a3 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1a3',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="GrapeFruit 0.1a3 documentation" href="#" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <img alt="_images/GrapeFruit.png" id="grapefruit-index" src="_images/GrapeFruit.png" />
+<p>Welcome! This is the documentation for GrapeFruit 0.1a3,
+last updated July 15, 2015.</p>
+<p>See the <a class="reference internal" href="genindex.html"><span>Index</span></a> for a list of the topics.</p>
+<span class="target" id="module-grapefruit"></span><div class="section" id="the-color-class">
+<h1>The Color class<a class="headerlink" href="#the-color-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="grapefruit.Color">
+<em class="property">class </em><code class="descclassname">grapefruit.</code><code class="descname">Color</code><a class="headerlink" href="#grapefruit.Color" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The grapefruit module contains only the <a class="reference internal" href="#grapefruit.Color" title="grapefruit.Color"><code class="xref py py-class docutils literal"><span class="pre">Color</span></code></a> class, which exposes all
+the functionnalities. It can be used to store a color value and manipulate it,
+or convert it to another color system.</p>
+<p>If you are only interested in converting you colors from one system to another,
+you can store them using regular tuples instead of <a class="reference internal" href="#grapefruit.Color" title="grapefruit.Color"><code class="xref py py-class docutils literal"><span class="pre">Color</span></code></a> instances.
+You can then use the class static methods to perform the conversions.</p>
+<p><a class="reference internal" href="#grapefruit.Color" title="grapefruit.Color"><code class="xref py py-class docutils literal"><span class="pre">Color</span></code></a> stores both the RGB and HSL representation of the color.
+This makes possible to keep the hue intact when the color is a pure white
+due to its lightness.
+However, certain operations work only with the RGB values, and might then
+lose the hue.</p>
+<p>All the operations assume that you provide values in the specified ranges,
+no checks are made whatsoever. If you provide a value outside of the
+specified ranges, you&#8217;ll get some strange results...</p>
+<p>The class instances are immutable, all the methods return a new instance
+of the <a class="reference internal" href="#grapefruit.Color" title="grapefruit.Color"><code class="xref py py-class docutils literal"><span class="pre">Color</span></code></a> class, and all the properties are read-only.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Some operations may provide results a bit outside the specified ranges,
+the results are not capped.
+This is due to certain color systems having a widers gamut than others.</p>
+</div>
+<div class="section" id="class-content">
+<h2>Class content<a class="headerlink" href="#class-content" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference internal" href="#class-constants"><span>Class Constants</span></a><ul>
+<li><a class="reference internal" href="#grapefruit.Color.WHITE_REFERENCE" title="grapefruit.Color.WHITE_REFERENCE"><code class="xref py py-const docutils literal"><span class="pre">Color.WHITE_REFERENCE</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NAMED_COLOR" title="grapefruit.Color.NAMED_COLOR"><code class="xref py py-const docutils literal"><span class="pre">Color.NAMED_COLOR</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#conversion-functions"><span>Conversion functions</span></a><ul>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToHsl" title="grapefruit.Color.RgbToHsl"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToHsl()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.HslToRgb" title="grapefruit.Color.HslToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.HslToRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToHsv" title="grapefruit.Color.RgbToHsv"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToHsv()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.HsvToRgb" title="grapefruit.Color.HsvToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.HsvToRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToYiq" title="grapefruit.Color.RgbToYiq"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToYiq()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.YiqToRgb" title="grapefruit.Color.YiqToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.YiqToRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToYuv" title="grapefruit.Color.RgbToYuv"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToYuv()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.YuvToRgb" title="grapefruit.Color.YuvToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.YuvToRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToXyz" title="grapefruit.Color.RgbToXyz"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToXyz()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.XyzToRgb" title="grapefruit.Color.XyzToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.XyzToRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.XyzToLab" title="grapefruit.Color.XyzToLab"><code class="xref py py-meth docutils literal"><span class="pre">Color.XyzToLab()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.LabToXyz" title="grapefruit.Color.LabToXyz"><code class="xref py py-meth docutils literal"><span class="pre">Color.LabToXyz()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.CmykToCmy" title="grapefruit.Color.CmykToCmy"><code class="xref py py-meth docutils literal"><span class="pre">Color.CmykToCmy()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.CmyToCmyk" title="grapefruit.Color.CmyToCmyk"><code class="xref py py-meth docutils literal"><span class="pre">Color.CmyToCmyk()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToCmy" title="grapefruit.Color.RgbToCmy"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToCmy()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.CmyToRgb" title="grapefruit.Color.CmyToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.CmyToRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToHtml" title="grapefruit.Color.RgbToHtml"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToHtml()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.HtmlToRgb" title="grapefruit.Color.HtmlToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.HtmlToRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToPil" title="grapefruit.Color.RgbToPil"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToPil()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.PilToRgb" title="grapefruit.Color.PilToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.PilToRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToWebSafe" title="grapefruit.Color.RgbToWebSafe"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToWebSafe()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToGreyscale" title="grapefruit.Color.RgbToGreyscale"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToGreyscale()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RgbToRyb" title="grapefruit.Color.RgbToRyb"><code class="xref py py-meth docutils literal"><span class="pre">Color.RgbToRyb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.RybToRgb" title="grapefruit.Color.RybToRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.RybToRgb()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#instantiation-functions"><span>Instantiation functions</span></a><ul>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromRgb" title="grapefruit.Color.NewFromRgb"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromRgb()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromHsl" title="grapefruit.Color.NewFromHsl"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromHsl()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromHsv" title="grapefruit.Color.NewFromHsv"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromHsv()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromYiq" title="grapefruit.Color.NewFromYiq"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromYiq()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromYuv" title="grapefruit.Color.NewFromYuv"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromYuv()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromXyz" title="grapefruit.Color.NewFromXyz"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromXyz()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromLab" title="grapefruit.Color.NewFromLab"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromLab()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromCmy" title="grapefruit.Color.NewFromCmy"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromCmy()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromCmyk" title="grapefruit.Color.NewFromCmyk"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromCmyk()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromHtml" title="grapefruit.Color.NewFromHtml"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromHtml()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.NewFromPil" title="grapefruit.Color.NewFromPil"><code class="xref py py-meth docutils literal"><span class="pre">Color.NewFromPil()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#properties"><span>Properties</span></a><ul>
+<li><a class="reference internal" href="#grapefruit.Color.alpha" title="grapefruit.Color.alpha"><code class="xref py py-attr docutils literal"><span class="pre">Color.alpha</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.whiteRef" title="grapefruit.Color.whiteRef"><code class="xref py py-attr docutils literal"><span class="pre">Color.whiteRef</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.rgb" title="grapefruit.Color.rgb"><code class="xref py py-attr docutils literal"><span class="pre">Color.rgb</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.hue" title="grapefruit.Color.hue"><code class="xref py py-attr docutils literal"><span class="pre">Color.hue</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.hsl" title="grapefruit.Color.hsl"><code class="xref py py-attr docutils literal"><span class="pre">Color.hsl</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.hsv" title="grapefruit.Color.hsv"><code class="xref py py-attr docutils literal"><span class="pre">Color.hsv</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.yiq" title="grapefruit.Color.yiq"><code class="xref py py-attr docutils literal"><span class="pre">Color.yiq</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.yuv" title="grapefruit.Color.yuv"><code class="xref py py-attr docutils literal"><span class="pre">Color.yuv</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.xyz" title="grapefruit.Color.xyz"><code class="xref py py-attr docutils literal"><span class="pre">Color.xyz</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.lab" title="grapefruit.Color.lab"><code class="xref py py-attr docutils literal"><span class="pre">Color.lab</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.cmy" title="grapefruit.Color.cmy"><code class="xref py py-attr docutils literal"><span class="pre">Color.cmy</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.cmyk" title="grapefruit.Color.cmyk"><code class="xref py py-attr docutils literal"><span class="pre">Color.cmyk</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.html" title="grapefruit.Color.html"><code class="xref py py-attr docutils literal"><span class="pre">Color.html</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.pil" title="grapefruit.Color.pil"><code class="xref py py-attr docutils literal"><span class="pre">Color.pil</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.webSafe" title="grapefruit.Color.webSafe"><code class="xref py py-attr docutils literal"><span class="pre">Color.webSafe</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.greyscale" title="grapefruit.Color.greyscale"><code class="xref py py-attr docutils literal"><span class="pre">Color.greyscale</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#manipulation-methods"><span>Manipulation methods</span></a><ul>
+<li><a class="reference internal" href="#grapefruit.Color.ColorWithAlpha" title="grapefruit.Color.ColorWithAlpha"><code class="xref py py-meth docutils literal"><span class="pre">Color.ColorWithAlpha()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.ColorWithWhiteRef" title="grapefruit.Color.ColorWithWhiteRef"><code class="xref py py-meth docutils literal"><span class="pre">Color.ColorWithWhiteRef()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.ColorWithHue" title="grapefruit.Color.ColorWithHue"><code class="xref py py-meth docutils literal"><span class="pre">Color.ColorWithHue()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.ColorWithSaturation" title="grapefruit.Color.ColorWithSaturation"><code class="xref py py-meth docutils literal"><span class="pre">Color.ColorWithSaturation()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.ColorWithLightness" title="grapefruit.Color.ColorWithLightness"><code class="xref py py-meth docutils literal"><span class="pre">Color.ColorWithLightness()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.DarkerColor" title="grapefruit.Color.DarkerColor"><code class="xref py py-meth docutils literal"><span class="pre">Color.DarkerColor()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.LighterColor" title="grapefruit.Color.LighterColor"><code class="xref py py-meth docutils literal"><span class="pre">Color.LighterColor()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.Saturate" title="grapefruit.Color.Saturate"><code class="xref py py-meth docutils literal"><span class="pre">Color.Saturate()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.Desaturate" title="grapefruit.Color.Desaturate"><code class="xref py py-meth docutils literal"><span class="pre">Color.Desaturate()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.WebSafeDither" title="grapefruit.Color.WebSafeDither"><code class="xref py py-meth docutils literal"><span class="pre">Color.WebSafeDither()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#generation-methods"><span>Generation methods</span></a><ul>
+<li><a class="reference internal" href="#grapefruit.Color.Gradient" title="grapefruit.Color.Gradient"><code class="xref py py-meth docutils literal"><span class="pre">Color.Gradient()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.ComplementaryColor" title="grapefruit.Color.ComplementaryColor"><code class="xref py py-meth docutils literal"><span class="pre">Color.ComplementaryColor()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.TriadicScheme" title="grapefruit.Color.TriadicScheme"><code class="xref py py-meth docutils literal"><span class="pre">Color.TriadicScheme()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.TetradicScheme" title="grapefruit.Color.TetradicScheme"><code class="xref py py-meth docutils literal"><span class="pre">Color.TetradicScheme()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.AnalogousScheme" title="grapefruit.Color.AnalogousScheme"><code class="xref py py-meth docutils literal"><span class="pre">Color.AnalogousScheme()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#blending-methods"><span>Blending methods</span></a><ul>
+<li><a class="reference internal" href="#grapefruit.Color.AlphaBlend" title="grapefruit.Color.AlphaBlend"><code class="xref py py-meth docutils literal"><span class="pre">Color.AlphaBlend()</span></code></a></li>
+<li><a class="reference internal" href="#grapefruit.Color.Blend" title="grapefruit.Color.Blend"><code class="xref py py-meth docutils literal"><span class="pre">Color.Blend()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+<div class="section" id="example-usage">
+<h2>Example usage<a class="headerlink" href="#example-usage" title="Permalink to this headline">¶</a></h2>
+<blockquote>
+<div><p>To create an instance of the grapefruit.Color from RGB values:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">grapefruit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">grapefruit</span><span class="o">.</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To get the values of the color in another colorspace:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">v</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">hsv</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">l</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">lab</span>
+</pre></div>
+</div>
+<p>To get the complementary of a color:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">compl</span> <span class="o">=</span> <span class="n">col</span><span class="o">.</span><span class="n">ComplementaryColor</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span> <span class="n">compl</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(210.0, 1.0, 0.5)</span>
+</pre></div>
+</div>
+<p>To directly convert RGB values to their HSL equivalent:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">h</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">l</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">RgbToHsl</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div>
+<div class="section" id="class-constants">
+<span id="id1"></span><h2>Class Constants<a class="headerlink" href="#class-constants" title="Permalink to this headline">¶</a></h2>
+<dl class="data">
+<dt id="grapefruit.Color.WHITE_REFERENCE">
+<code class="descclassname">Color.</code><code class="descname">WHITE_REFERENCE</code><a class="headerlink" href="#grapefruit.Color.WHITE_REFERENCE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The reference white points of the CIE standards illuminants, calculated from
+the chromaticity coordinates found at:
+<a class="reference external" href="http://en.wikipedia.org/wiki/Standard_illuminant">http://en.wikipedia.org/wiki/Standard_illuminant</a></p>
+<p>A dictionary mapping the name of the CIE standard illuminants to their reference
+white points. The white points are required for the XYZ &lt;-&gt; L*a*b conversions.</p>
+<p>The key names are build using the following pattern: <code class="docutils literal"><span class="pre">&lt;observer&gt;_&lt;illuminant&gt;</span></code></p>
+<p>The possible values for <code class="docutils literal"><span class="pre">&lt;observer&gt;</span></code> are:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="15%" />
+<col width="85%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">Observer</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>std</td>
+<td>CIE 1931 2° Standard Observer</td>
+</tr>
+<tr class="row-odd"><td>sup</td>
+<td>CIE 1964 10° Supplementary Observer</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>The possible values for <code class="docutils literal"><span class="pre">&lt;illuminant&gt;</span></code> are the name of the standard illuminants:</p>
+<blockquote>
+<div><table border="1" class="docutils">
+<colgroup>
+<col width="9%" />
+<col width="13%" />
+<col width="78%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Value</th>
+<th class="head">CCT</th>
+<th class="head">Illuminant</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>A</td>
+<td>2856 K</td>
+<td>Incandescent tungsten</td>
+</tr>
+<tr class="row-odd"><td>B</td>
+<td>4874 K</td>
+<td>Direct sunlight at noon (obsolete)</td>
+</tr>
+<tr class="row-even"><td>C</td>
+<td>6774 K</td>
+<td>North sky daylight (obsolete)</td>
+</tr>
+<tr class="row-odd"><td>D50</td>
+<td>5003 K</td>
+<td>ICC Profile PCS. Horizon light.</td>
+</tr>
+<tr class="row-even"><td>D55</td>
+<td>5503 K</td>
+<td>Compromise between incandescent and daylight</td>
+</tr>
+<tr class="row-odd"><td>D65</td>
+<td>6504 K</td>
+<td>Noon daylight (TV &amp; sRGB colorspace)</td>
+</tr>
+<tr class="row-even"><td>D75</td>
+<td>7504 K</td>
+<td>North sky day light</td>
+</tr>
+<tr class="row-odd"><td>E</td>
+<td>~5455 K</td>
+<td>Equal energy radiator (not a black body)</td>
+</tr>
+<tr class="row-even"><td>F1</td>
+<td>6430 K</td>
+<td>Daylight Fluorescent</td>
+</tr>
+<tr class="row-odd"><td>F2</td>
+<td>4230 K</td>
+<td>Cool White Fluorescent</td>
+</tr>
+<tr class="row-even"><td>F3</td>
+<td>3450 K</td>
+<td>White Fluorescent</td>
+</tr>
+<tr class="row-odd"><td>F4</td>
+<td>2940 K</td>
+<td>Warm White Fluorescent</td>
+</tr>
+<tr class="row-even"><td>F5</td>
+<td>6350 K</td>
+<td>Daylight Fluorescent</td>
+</tr>
+<tr class="row-odd"><td>F6</td>
+<td>4150 K</td>
+<td>Lite White Fluorescent</td>
+</tr>
+<tr class="row-even"><td>F7</td>
+<td>6500 K</td>
+<td>Broadband fluorescent, D65 simulator</td>
+</tr>
+<tr class="row-odd"><td>F8</td>
+<td>5000 K</td>
+<td>Broadband fluorescent, D50 simulator</td>
+</tr>
+<tr class="row-even"><td>F9</td>
+<td>4150 K</td>
+<td>Broadband fluorescent, Cool White Deluxe</td>
+</tr>
+<tr class="row-odd"><td>F10</td>
+<td>5000 K</td>
+<td>Narrowband fluorescent, Philips TL85, Ultralume 50</td>
+</tr>
+<tr class="row-even"><td>F11</td>
+<td>4000 K</td>
+<td>Narrowband fluorescent, Philips TL84, Ultralume 40</td>
+</tr>
+<tr class="row-odd"><td>F12</td>
+<td>3000 K</td>
+<td>Narrowband fluorescent, Philips TL83, Ultralume 30</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<dl class="data">
+<dt id="grapefruit.Color.NAMED_COLOR">
+<code class="descclassname">Color.</code><code class="descname">NAMED_COLOR</code><a class="headerlink" href="#grapefruit.Color.NAMED_COLOR" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<p>The names and RGB values of the X11 colors supported by popular browsers, with
+the gray/grey spelling issues, fixed so that both work (e.g light*grey* and
+light*gray*).</p>
+<p>Note: For <em>Gray</em>, <em>Green</em>, <em>Maroon</em> and <em>Purple</em>, the HTML/CSS values are used
+instead of the X11 ones
+(see <a class="reference external" href="http://en.wikipedia.org/wiki/X11_color_names#Color_names_that_clash_between_X11_and_HTML.2FCSS">X11/CSS clashes</a>)</p>
+<p>Reference: <a class="reference external" href="http://www.w3.org/TR/css3-iccprof#x11-color">CSS3 Color module</a></p>
+</div>
+<div class="section" id="conversion-functions">
+<span id="id2"></span><h2>Conversion functions<a class="headerlink" href="#conversion-functions" title="Permalink to this headline">¶</a></h2>
+<p>The conversion functions are static methods of the <a class="reference internal" href="#grapefruit.Color" title="grapefruit.Color"><code class="xref py py-class docutils literal"><span class="pre">Color</span></code></a> class that
+let you convert a color stored as the list of its components rather than
+as a <a class="reference internal" href="#grapefruit.Color" title="grapefruit.Color"><code class="xref py py-class docutils literal"><span class="pre">Color</span></code></a> instance.</p>
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToHsl">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToHsl</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToHsl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB coordinates to HSL.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (h, s, l) tuple in the range:
+h[0...360],
+s[0...1],
+l[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RgbToHsl</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">(30.0, 1.0, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.HslToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">HslToRgb</code><span class="sig-paren">(</span><em>h</em>, <em>s</em>, <em>l</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.HslToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from HSL coordinates to RGB.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">h:</th><td class="field-body">The Hue component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">s:</th><td class="field-body">The Saturation component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">l:</th><td class="field-body">The Lightness component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">HslToRgb</span><span class="p">(</span><span class="mf">30.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToHsv">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToHsv</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToHsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB coordinates to HSV.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (h, s, v) tuple in the range:
+h[0...360],
+s[0...1],
+v[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RgbToHsv</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">(30.0, 1.0, 1.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.HsvToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">HsvToRgb</code><span class="sig-paren">(</span><em>h</em>, <em>s</em>, <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.HsvToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB coordinates to HSV.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">h:</th><td class="field-body">The Hus component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">s:</th><td class="field-body">The Saturation component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">v:</th><td class="field-body">The Value component [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">HslToRgb</span><span class="p">(</span><span class="mf">30.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToYiq">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToYiq</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToYiq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB to YIQ.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (y, i, q) tuple in the range:
+y[0...1],
+i[0...1],
+q[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">RgbToYiq</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;(0.592263, 0.458874, -0.0499818)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.YiqToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">YiqToRgb</code><span class="sig-paren">(</span><em>y</em>, <em>i</em>, <em>q</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.YiqToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from YIQ coordinates to RGB.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">Tte Y component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">i:</th><td class="field-body">The I component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">q:</th><td class="field-body">The Q component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">YiqToRgb</span><span class="p">(</span><span class="mf">0.592263</span><span class="p">,</span> <span class="mf">0.458874</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0499818</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.5, 5.442e-07)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToYuv">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToYuv</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToYuv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB coordinates to YUV.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (y, u, v) tuple in the range:
+y[0...1],
+u[-0.436...0.436],
+v[-0.615...0.615]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">RgbToYuv</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;(0.5925, -0.29156, 0.357505)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.YuvToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">YuvToRgb</code><span class="sig-paren">(</span><em>y</em>, <em>u</em>, <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.YuvToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from YUV coordinates to RGB.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">The Y component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">u:</th><td class="field-body">The U component value [-0.436...0.436]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">v:</th><td class="field-body">The V component value [-0.615...0.615]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">YuvToRgb</span><span class="p">(</span><span class="mf">0.5925</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2916</span><span class="p">,</span> <span class="mf">0.3575</span><span class="p">)</span>
+<span class="go">&#39;(0.999989, 0.500015, -6.3276e-05)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToXyz">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToXyz</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToXyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from sRGB to CIE XYZ.</p>
+<p>The methods assumes that the RGB coordinates are given in the sRGB
+colorspace (D65).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Compensation for the sRGB gamma correction is applied before converting.</p>
+</div>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (x, y, z) tuple in the range:
+x[0...1],
+y[0...1],
+z[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">RgbToXyz</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;(0.488941, 0.365682, 0.0448137)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.XyzToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">XyzToRgb</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.XyzToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from CIE XYZ coordinates to sRGB.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Compensation for sRGB gamma correction is applied before converting.</p>
+</div>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">x:</th><td class="field-body">The X component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">y:</th><td class="field-body">The Y component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">z:</th><td class="field-body">The Z component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">XyzToRgb</span><span class="p">(</span><span class="mf">0.488941</span><span class="p">,</span> <span class="mf">0.365682</span><span class="p">,</span> <span class="mf">0.0448137</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.5, 6.81883e-08)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.XyzToLab">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">XyzToLab</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.XyzToLab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from CIE XYZ to CIE L*a*b*.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">x:</th><td class="field-body">The X component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">y:</th><td class="field-body">The Y component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">z:</th><td class="field-body">The Z component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (L, a, b) tuple in the range:
+L[0...100],
+a[-1...1],
+b[-1...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">XyzToLab</span><span class="p">(</span><span class="mf">0.488941</span><span class="p">,</span> <span class="mf">0.365682</span><span class="p">,</span> <span class="mf">0.0448137</span><span class="p">)</span>
+<span class="go">&#39;(66.9518, 0.43084, 0.739692)&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">XyzToLab</span><span class="p">(</span><span class="mf">0.488941</span><span class="p">,</span> <span class="mf">0.365682</span><span class="p">,</span> <span class="mf">0.0448137</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">WHITE_REFERENCE</span><span class="p">[</span><span class="s">&#39;std_D50&#39;</span><span class="p">])</span>
+<span class="go">&#39;(66.9518, 0.411663, 0.67282)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.LabToXyz">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">LabToXyz</code><span class="sig-paren">(</span><em>l</em>, <em>a</em>, <em>b</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.LabToXyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from CIE L*a*b* to CIE 1931 XYZ.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">l:</th><td class="field-body">The L component [0...100]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">a:</th><td class="field-body">The a component [-1...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The a component [-1...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (x, y, z) tuple in the range:
+x[0...q],
+y[0...1],
+z[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">LabToXyz</span><span class="p">(</span><span class="mf">66.9518</span><span class="p">,</span> <span class="mf">0.43084</span><span class="p">,</span> <span class="mf">0.739692</span><span class="p">)</span>
+<span class="go">&#39;(0.488941, 0.365682, 0.0448137)&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">LabToXyz</span><span class="p">(</span><span class="mf">66.9518</span><span class="p">,</span> <span class="mf">0.411663</span><span class="p">,</span> <span class="mf">0.67282</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">WHITE_REFERENCE</span><span class="p">[</span><span class="s">&#39;std_D50&#39;</span><span class="p">])</span>
+<span class="go">&#39;(0.488941, 0.365682, 0.0448138)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.CmykToCmy">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">CmykToCmy</code><span class="sig-paren">(</span><em>c</em>, <em>m</em>, <em>y</em>, <em>k</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.CmykToCmy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from CMYK coordinates to CMY.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">c:</th><td class="field-body">The Cyan component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">m:</th><td class="field-body">The Magenta component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">The Yellow component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">k:</th><td class="field-body">The Black component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (c, m, y) tuple in the range:
+c[0...1],
+m[0...1],
+y[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">CmykToCmy</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.32</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.66, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.CmyToCmyk">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">CmyToCmyk</code><span class="sig-paren">(</span><em>c</em>, <em>m</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.CmyToCmyk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from CMY coordinates to CMYK.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">c:</th><td class="field-body">The Cyan component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">m:</th><td class="field-body">The Magenta component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">The Yellow component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (c, m, y, k) tuple in the range:
+c[0...1],
+m[0...1],
+y[0...1],
+k[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">CmyToCmyk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.66</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.32, 0, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToCmy">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToCmy</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToCmy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB coordinates to CMY.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (c, m, y) tuple in the range:
+c[0...1],
+m[0...1],
+y[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RgbToCmy</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">(0, 0.5, 1)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.CmyToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">CmyToRgb</code><span class="sig-paren">(</span><em>c</em>, <em>m</em>, <em>y</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.CmyToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from CMY coordinates to RGB.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">c:</th><td class="field-body">The Cyan component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">m:</th><td class="field-body">The Magenta component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">The Yellow component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">CmyToRgb</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">(1, 0.5, 0)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToHtml">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToHtml</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToHtml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from (r, g, b) to #RRGGBB.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A CSS string representation of this color (#RRGGBB).</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RgbToHtml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;#ff8000&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.HtmlToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">HtmlToRgb</code><span class="sig-paren">(</span><em>html</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.HtmlToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the HTML color to (r, g, b).</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">html:</th><td class="field-body">the HTML definition of the color (#RRGGBB or #RGB or a color name).</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+<dt>Throws:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">ValueError:</th><td class="field-body">If html is neither a known color name or a hexadecimal RGB
+representation.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">HtmlToRgb</span><span class="p">(</span><span class="s">&#39;#ff8000&#39;</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.501961, 0)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">HtmlToRgb</span><span class="p">(</span><span class="s">&#39;ff8000&#39;</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.501961, 0)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">HtmlToRgb</span><span class="p">(</span><span class="s">&#39;#f60&#39;</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.4, 0)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">HtmlToRgb</span><span class="p">(</span><span class="s">&#39;f60&#39;</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.4, 0)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">HtmlToRgb</span><span class="p">(</span><span class="s">&#39;lemonchiffon&#39;</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.980392, 0.803922)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToPil">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToPil</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToPil" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB to a PIL-compatible integer.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A PIL compatible integer (0xBBGGRR).</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;0x</span><span class="si">%06x</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">RgbToPil</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;0x0080ff&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.PilToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">PilToRgb</code><span class="sig-paren">(</span><em>pil</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.PilToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from a PIL-compatible integer to RGB.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd>pil: a PIL compatible color representation (0xBBGGRR)</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+the range:
+r: [0...1]
+g: [0...1]
+b: [0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">PilToRgb</span><span class="p">(</span><span class="mh">0x0080ff</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.501961, 0)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToWebSafe">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToWebSafe</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em>, <em>alt=False</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToWebSafe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB to &#8216;web safe&#8217; RGB</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alt:</th><td class="field-body">If True, use the alternative color instead of the nearest one.
+Can be used for dithering.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">RgbToWebSafe</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.55</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.6, 0)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToGreyscale">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToGreyscale</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToGreyscale" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the color from RGB to its greyscale equivalent</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>The color as an (r, g, b) tuple in the range:
+the range:
+r[0...1],
+g[0...1],
+b[0...1]</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">Color</span><span class="o">.</span><span class="n">RgbToGreyscale</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="go">&#39;(0.6, 0.6, 0.6)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RgbToRyb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RgbToRyb</code><span class="sig-paren">(</span><em>hue</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RgbToRyb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps a hue on the RGB color wheel to Itten&#8217;s RYB wheel.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">hue:</th><td class="field-body">The hue on the RGB color wheel [0...360]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>An approximation of the corresponding hue on Itten&#8217;s RYB wheel.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RgbToRyb</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="go">26.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.RybToRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">RybToRgb</code><span class="sig-paren">(</span><em>hue</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.RybToRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps a hue on Itten&#8217;s RYB color wheel to the standard RGB wheel.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">hue:</th><td class="field-body">The hue on Itten&#8217;s RYB color wheel [0...360]</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>An approximation of the corresponding hue on the standard RGB wheel.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">RybToRgb</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
+<span class="go">8.0</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="instantiation-functions">
+<span id="id3"></span><h2>Instantiation functions<a class="headerlink" href="#instantiation-functions" title="Permalink to this headline">¶</a></h2>
+<p>The instantiation functions let you create a new instance of the <a class="reference internal" href="#grapefruit.Color" title="grapefruit.Color"><code class="xref py py-class docutils literal"><span class="pre">Color</span></code></a>
+class from the color components using the color system of your choice.</p>
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromRgb">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromRgb</code><span class="sig-paren">(</span><em>r</em>, <em>g</em>, <em>b</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromRgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed RGB values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">r:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">g:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromHsl">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromHsl</code><span class="sig-paren">(</span><em>h</em>, <em>s</em>, <em>l</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromHsl" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed HSL values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">h:</th><td class="field-body">The Hue component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">s:</th><td class="field-body">The Saturation component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">l:</th><td class="field-body">The Lightness component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromHsv">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromHsv</code><span class="sig-paren">(</span><em>h</em>, <em>s</em>, <em>v</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromHsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed HSV values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">h:</th><td class="field-body">The Hus component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">s:</th><td class="field-body">The Saturation component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">v:</th><td class="field-body">The Value component [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsv</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsv</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromYiq">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromYiq</code><span class="sig-paren">(</span><em>y</em>, <em>i</em>, <em>q</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromYiq" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed YIQ values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">The Y component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">i:</th><td class="field-body">The I component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">q:</th><td class="field-body">The Q component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromYiq</span><span class="p">(</span><span class="mf">0.5922</span><span class="p">,</span> <span class="mf">0.45885</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">))</span>
+<span class="go">&#39;(0.999902, 0.499955, -6.6905e-05, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromYiq</span><span class="p">(</span><span class="mf">0.5922</span><span class="p">,</span> <span class="mf">0.45885</span><span class="p">,</span><span class="o">-</span><span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="go">&#39;(0.999902, 0.499955, -6.6905e-05, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromYuv">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromYuv</code><span class="sig-paren">(</span><em>y</em>, <em>u</em>, <em>v</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromYuv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed YUV values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">The Y component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">u:</th><td class="field-body">The U component value [-0.436...0.436]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">v:</th><td class="field-body">The V component value [-0.615...0.615]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromYuv</span><span class="p">(</span><span class="mf">0.5925</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2916</span><span class="p">,</span> <span class="mf">0.3575</span><span class="p">))</span>
+<span class="go">&#39;(0.999989, 0.500015, -6.3276e-05, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromYuv</span><span class="p">(</span><span class="mf">0.5925</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.2916</span><span class="p">,</span> <span class="mf">0.3575</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="go">&#39;(0.999989, 0.500015, -6.3276e-05, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromXyz">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromXyz</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromXyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed CIE-XYZ values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">x:</th><td class="field-body">The Red component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">y:</th><td class="field-body">The Green component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">z:</th><td class="field-body">The Blue component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromXyz</span><span class="p">(</span><span class="mf">0.488941</span><span class="p">,</span> <span class="mf">0.365682</span><span class="p">,</span> <span class="mf">0.0448137</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.5, 6.81883e-08, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromXyz</span><span class="p">(</span><span class="mf">0.488941</span><span class="p">,</span> <span class="mf">0.365682</span><span class="p">,</span> <span class="mf">0.0448137</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.5, 6.81883e-08, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromLab">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromLab</code><span class="sig-paren">(</span><em>l</em>, <em>a</em>, <em>b</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromLab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed CIE-LAB values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">l:</th><td class="field-body">The L component [0...100]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">a:</th><td class="field-body">The a component [-1...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">b:</th><td class="field-body">The a component [-1...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromLab</span><span class="p">(</span><span class="mf">66.9518</span><span class="p">,</span> <span class="mf">0.43084</span><span class="p">,</span> <span class="mf">0.739692</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.5, 1.09491e-08, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromLab</span><span class="p">(</span><span class="mf">66.9518</span><span class="p">,</span> <span class="mf">0.43084</span><span class="p">,</span> <span class="mf">0.739692</span><span class="p">,</span> <span class="n">wref</span><span class="o">=</span><span class="n">Color</span><span class="o">.</span><span class="n">WHITE_REFERENCE</span><span class="p">[</span><span class="s">&#39;std_D50&#39;</span><span class="p">]))</span>
+<span class="go">&#39;(1.01238, 0.492011, -0.14311, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromLab</span><span class="p">(</span><span class="mf">66.9518</span><span class="p">,</span> <span class="mf">0.43084</span><span class="p">,</span> <span class="mf">0.739692</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.5, 1.09491e-08, 0.5)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromLab</span><span class="p">(</span><span class="mf">66.9518</span><span class="p">,</span> <span class="mf">0.43084</span><span class="p">,</span> <span class="mf">0.739692</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">WHITE_REFERENCE</span><span class="p">[</span><span class="s">&#39;std_D50&#39;</span><span class="p">]))</span>
+<span class="go">&#39;(1.01238, 0.492011, -0.14311, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromCmy">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromCmy</code><span class="sig-paren">(</span><em>c</em>, <em>m</em>, <em>y</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromCmy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed CMY values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">c:</th><td class="field-body">The Cyan component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">m:</th><td class="field-body">The Magenta component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">The Yellow component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromCmy</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="go">(1, 0.5, 0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromCmy</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(1, 0.5, 0, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromCmyk">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromCmyk</code><span class="sig-paren">(</span><em>c</em>, <em>m</em>, <em>y</em>, <em>k</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromCmyk" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed CMYK values.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">c:</th><td class="field-body">The Cyan component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">m:</th><td class="field-body">The Magenta component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">y:</th><td class="field-body">The Yellow component value [0...1]</td>
+</tr>
+<tr class="field-even field"><th class="field-name">k:</th><td class="field-body">The Black component value [0...1]</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-even field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromCmyk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.32</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="go">&#39;(0, 0.34, 0.5, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromCmyk</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.32</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="go">&#39;(0, 0.34, 0.5, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromHtml">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromHtml</code><span class="sig-paren">(</span><em>html</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromHtml" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed HTML color definition.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">html:</th><td class="field-body">The HTML definition of the color (#RRGGBB or #RGB or a color name).</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHtml</span><span class="p">(</span><span class="s">&#39;#ff8000&#39;</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.501961, 0, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHtml</span><span class="p">(</span><span class="s">&#39;ff8000&#39;</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.501961, 0, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHtml</span><span class="p">(</span><span class="s">&#39;#f60&#39;</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.4, 0, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHtml</span><span class="p">(</span><span class="s">&#39;f60&#39;</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.4, 0, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHtml</span><span class="p">(</span><span class="s">&#39;lemonchiffon&#39;</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.980392, 0.803922, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHtml</span><span class="p">(</span><span class="s">&#39;#ff8000&#39;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.501961, 0, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="grapefruit.Color.NewFromPil">
+<em class="property">static </em><code class="descclassname">Color.</code><code class="descname">NewFromPil</code><span class="sig-paren">(</span><em>pil</em>, <em>alpha=1.0</em>, <em>wref=(0.95043</em>, <em>1.0</em>, <em>1.0889)</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.NewFromPil" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on the specifed PIL color.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">pil:</th><td class="field-body">A PIL compatible color representation (0xBBGGRR)</td>
+</tr>
+<tr class="field-even field"><th class="field-name">alpha:</th><td class="field-body">The color transparency [0...1], default is opaque</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference, default is 2° D65.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromPil</span><span class="p">(</span><span class="mh">0x0080ff</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.501961, 0, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromPil</span><span class="p">(</span><span class="mh">0x0080ff</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">))</span>
+<span class="go">&#39;(1, 0.501961, 0, 0.5)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="properties">
+<span id="id4"></span><h2>Properties<a class="headerlink" href="#properties" title="Permalink to this headline">¶</a></h2>
+<p>The properties get the value of the instance in the specified color model.</p>
+<p>The properties returning calculated values unless marked otherwise.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">All the properties are read-only. You need to make a copy of the instance
+to modify the color value.</p>
+</div>
+<dl class="attribute">
+<dt id="grapefruit.Color.alpha">
+<code class="descclassname">Color.</code><code class="descname">alpha</code><a class="headerlink" href="#grapefruit.Color.alpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>The transparency of this color. 0.0 is transparent and 1.0 is fully opaque.</p>
+<p><em>This value is not calculated,  the stored value is returned directly.</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.whiteRef">
+<code class="descclassname">Color.</code><code class="descname">whiteRef</code><a class="headerlink" href="#grapefruit.Color.whiteRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>the white reference point of this color.</p>
+<p><em>This value is not calculated,  the stored value is returned directly.</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.rgb">
+<code class="descclassname">Color.</code><code class="descname">rgb</code><a class="headerlink" href="#grapefruit.Color.rgb" title="Permalink to this definition">¶</a></dt>
+<dd><p>The RGB values of this Color.</p>
+<p><em>This value is not calculated,  the stored value is returned directly.</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.hue">
+<code class="descclassname">Color.</code><code class="descname">hue</code><a class="headerlink" href="#grapefruit.Color.hue" title="Permalink to this definition">¶</a></dt>
+<dd><p>The hue of this color.</p>
+<p><em>This value is not calculated,  the stored value is returned directly.</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.hsl">
+<code class="descclassname">Color.</code><code class="descname">hsl</code><a class="headerlink" href="#grapefruit.Color.hsl" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HSL values of this Color.</p>
+<p><em>This value is not calculated,  the stored value is returned directly.</em></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.hsv">
+<code class="descclassname">Color.</code><code class="descname">hsv</code><a class="headerlink" href="#grapefruit.Color.hsv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The HSV values of this Color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.yiq">
+<code class="descclassname">Color.</code><code class="descname">yiq</code><a class="headerlink" href="#grapefruit.Color.yiq" title="Permalink to this definition">¶</a></dt>
+<dd><p>The YIQ values of this Color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.yuv">
+<code class="descclassname">Color.</code><code class="descname">yuv</code><a class="headerlink" href="#grapefruit.Color.yuv" title="Permalink to this definition">¶</a></dt>
+<dd><p>The YUV values of this Color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.xyz">
+<code class="descclassname">Color.</code><code class="descname">xyz</code><a class="headerlink" href="#grapefruit.Color.xyz" title="Permalink to this definition">¶</a></dt>
+<dd><p>The CIE-XYZ values of this Color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.lab">
+<code class="descclassname">Color.</code><code class="descname">lab</code><a class="headerlink" href="#grapefruit.Color.lab" title="Permalink to this definition">¶</a></dt>
+<dd><p>The CIE-LAB values of this Color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.cmy">
+<code class="descclassname">Color.</code><code class="descname">cmy</code><a class="headerlink" href="#grapefruit.Color.cmy" title="Permalink to this definition">¶</a></dt>
+<dd><p>The CMY values of this Color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.cmyk">
+<code class="descclassname">Color.</code><code class="descname">cmyk</code><a class="headerlink" href="#grapefruit.Color.cmyk" title="Permalink to this definition">¶</a></dt>
+<dd><p>The CMYK values of this Color.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.html">
+<code class="descclassname">Color.</code><code class="descname">html</code><a class="headerlink" href="#grapefruit.Color.html" title="Permalink to this definition">¶</a></dt>
+<dd><p>This Color as an HTML color definition.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.pil">
+<code class="descclassname">Color.</code><code class="descname">pil</code><a class="headerlink" href="#grapefruit.Color.pil" title="Permalink to this definition">¶</a></dt>
+<dd><p>This Color as a PIL compatible value.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.webSafe">
+<code class="descclassname">Color.</code><code class="descname">webSafe</code><a class="headerlink" href="#grapefruit.Color.webSafe" title="Permalink to this definition">¶</a></dt>
+<dd><p>The web safe color nearest to this one (RGB).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="grapefruit.Color.greyscale">
+<code class="descclassname">Color.</code><code class="descname">greyscale</code><a class="headerlink" href="#grapefruit.Color.greyscale" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="manipulation-methods">
+<span id="id5"></span><h2>Manipulation methods<a class="headerlink" href="#manipulation-methods" title="Permalink to this headline">¶</a></h2>
+<p>The manipulations methods let you create a new color by changing an existing
+color properties.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The methods <strong>do not</strong> modify the current Color instance. They create a
+new instance or a tuple of new instances with the specified modifications.</p>
+</div>
+<dl class="method">
+<dt id="grapefruit.Color.ColorWithAlpha">
+<code class="descclassname">Color.</code><code class="descname">ColorWithAlpha</code><span class="sig-paren">(</span><em>alpha</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.ColorWithAlpha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one with a new alpha value.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">alpha:</th><td class="field-body">The transparency of the new color [0...1].</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span><span class="o">.</span><span class="n">ColorWithAlpha</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(1.0, 0.5, 0.0, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.ColorWithWhiteRef">
+<code class="descclassname">Color.</code><code class="descname">ColorWithWhiteRef</code><span class="sig-paren">(</span><em>wref</em>, <em>labAsRef=False</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.ColorWithWhiteRef" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one with a new white reference.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">wref:</th><td class="field-body">The whitepoint reference.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">labAsRef:</th><td class="field-body">If True, the L*a*b* values of the current instance are used as reference
+for the new color; otherwise, the RGB values are used as reference.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="n">Color</span><span class="o">.</span><span class="n">WHITE_REFERENCE</span><span class="p">[</span><span class="s">&#39;std_D65&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">ColorWithWhiteRef</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">WHITE_REFERENCE</span><span class="p">[</span><span class="s">&#39;sup_D50&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="o">.</span><span class="n">rgb</span>
+<span class="go">(1.0, 0.5, 0.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">c2</span><span class="o">.</span><span class="n">whiteRef</span>
+<span class="go">&#39;(0.96721, 1, 0.81428)&#39;</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">ColorWithWhiteRef</span><span class="p">(</span><span class="n">Color</span><span class="o">.</span><span class="n">WHITE_REFERENCE</span><span class="p">[</span><span class="s">&#39;sup_D50&#39;</span><span class="p">],</span> <span class="n">labAsRef</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">c2</span><span class="o">.</span><span class="n">rgb</span>
+<span class="go">&#39;(1.01463, 0.490339, -0.148131)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">c2</span><span class="o">.</span><span class="n">whiteRef</span>
+<span class="go">&#39;(0.96721, 1, 0.81428)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">c</span><span class="o">.</span><span class="n">lab</span>
+<span class="go">&#39;(66.9518, 0.43084, 0.739692)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">c2</span><span class="o">.</span><span class="n">lab</span>
+<span class="go">&#39;(66.9518, 0.43084, 0.739693)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.ColorWithHue">
+<code class="descclassname">Color.</code><code class="descname">ColorWithHue</code><span class="sig-paren">(</span><em>hue</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.ColorWithHue" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one with a new hue.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">hue:</th><td class="field-body">The hue of the new color [0...360].</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ColorWithHue</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span>
+<span class="go">(1.0, 1.0, 0.0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ColorWithHue</span><span class="p">(</span><span class="mi">60</span><span class="p">)</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(60, 1, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.ColorWithSaturation">
+<code class="descclassname">Color.</code><code class="descname">ColorWithSaturation</code><span class="sig-paren">(</span><em>saturation</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.ColorWithSaturation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one with a new saturation value.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The saturation is defined for the HSL mode.</p>
+</div>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">saturation:</th><td class="field-body">The saturation of the new color [0...1].</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ColorWithSaturation</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="go">(0.75, 0.5, 0.25, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ColorWithSaturation</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(30, 0.5, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.ColorWithLightness">
+<code class="descclassname">Color.</code><code class="descname">ColorWithLightness</code><span class="sig-paren">(</span><em>lightness</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.ColorWithLightness" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one with a new lightness value.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">lightness:</th><td class="field-body">The lightness of the new color [0...1].</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ColorWithLightness</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="go">(0.5, 0.25, 0.0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ColorWithLightness</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(30, 1, 0.25)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.DarkerColor">
+<code class="descclassname">Color.</code><code class="descname">DarkerColor</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.DarkerColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one but darker.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">level:</th><td class="field-body">The amount by which the color should be darkened to produce
+the new one [0...1].</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">DarkerColor</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="go">(0.5, 0.25, 0.0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">DarkerColor</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(30, 1, 0.25)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.LighterColor">
+<code class="descclassname">Color.</code><code class="descname">LighterColor</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.LighterColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one but lighter.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">level:</th><td class="field-body">The amount by which the color should be lightened to produce
+the new one [0...1].</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">LighterColor</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="go">(1.0, 0.75, 0.5, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">LighterColor</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(30, 1, 0.75)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.Saturate">
+<code class="descclassname">Color.</code><code class="descname">Saturate</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.Saturate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one but more saturated.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">level:</th><td class="field-body">The amount by which the color should be saturated to produce
+the new one [0...1].</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">Saturate</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="go">(0.875, 0.5, 0.125, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">Saturate</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(30, 0.75, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.Desaturate">
+<code class="descclassname">Color.</code><code class="descname">Desaturate</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.Desaturate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance based on this one but less saturated.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">level:</th><td class="field-body">The amount by which the color should be desaturated to produce
+the new one [0...1].</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">Desaturate</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span>
+<span class="go">(0.625, 0.5, 0.375, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">Desaturate</span><span class="p">(</span><span class="mf">0.25</span><span class="p">)</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(30, 0.25, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.WebSafeDither">
+<code class="descclassname">Color.</code><code class="descname">WebSafeDither</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.WebSafeDither" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the two websafe colors nearest to this one.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A tuple of two grapefruit.Color instances which are the two
+web safe colors closest this one.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.45</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">WebSafeDither</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">c1</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.4, 0, 1)&#39;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.6, 0, 1)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="generation-methods">
+<span id="id6"></span><h2>Generation methods<a class="headerlink" href="#generation-methods" title="Permalink to this headline">¶</a></h2>
+<p>The generation methods let you create a color scheme by using a color as the
+start point.</p>
+<p>All the method, appart from Gradient and MonochromeScheme, have a &#8216;mode&#8217;
+parameter that let you choose which color wheel should be used to generate
+the scheme.</p>
+<dl class="docutils">
+<dt>The following modes are available:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">ryb:</th><td class="field-body">The <a class="reference external" href="http://en.wikipedia.org/wiki/RYB_color_model">RYB</a> color wheel,
+or <em>artistic color wheel</em>. While scientifically incorrect, it generally
+produces better schemes than RGB.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">rgb:</th><td class="field-body">The standard RGB color wheel.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+</dl>
+<dl class="method">
+<dt id="grapefruit.Color.Gradient">
+<code class="descclassname">Color.</code><code class="descname">Gradient</code><span class="sig-paren">(</span><em>target</em>, <em>steps=100</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.Gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a list with the gradient colors between this and the other color.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">target:</th><td class="field-body">The grapefruit.Color at the other end of the gradient.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">steps:</th><td class="field-body">The number of gradients steps to create.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A list of grapefruit.Color instances.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span><span class="o">.</span><span class="n">Gradient</span><span class="p">(</span><span class="n">c2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="go">[(0.75, 0.25, 0.0, 0.75), (0.5, 0.5, 0.0, 0.5), (0.25, 0.75, 0.0, 0.25)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.ComplementaryColor">
+<code class="descclassname">Color.</code><code class="descname">ComplementaryColor</code><span class="sig-paren">(</span><em>mode='ryb'</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.ComplementaryColor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new instance which is the complementary color of this one.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">mode:</th><td class="field-body">Select which color wheel to use for the generation (ryb/rgb).</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ComplementaryColor</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;rgb&#39;</span><span class="p">)</span>
+<span class="go">(0.0, 0.5, 1.0, 1.0)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">.</span><span class="n">ComplementaryColor</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;rgb&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(210, 1, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.MonochromeScheme">
+<code class="descclassname">Color.</code><code class="descname">MonochromeScheme</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.MonochromeScheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return 4 colors in the same hue with varying saturation/lightness.</p>
+<dl class="docutils">
+<dt>Returns:</dt>
+<dd>A tuple of 4 grapefruit.Color in the same hue as this one,
+with varying saturation/lightness.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="s">&#39;(</span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">, </span><span class="si">%g</span><span class="s">)&#39;</span> <span class="o">%</span> <span class="n">clr</span><span class="o">.</span><span class="n">hsl</span> <span class="k">for</span> <span class="n">clr</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="n">MonochromeScheme</span><span class="p">()]</span>
+<span class="go">[&#39;(30, 0.2, 0.8)&#39;, &#39;(30, 0.5, 0.3)&#39;, &#39;(30, 0.2, 0.6)&#39;, &#39;(30, 0.5, 0.8)&#39;]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.TriadicScheme">
+<code class="descclassname">Color.</code><code class="descname">TriadicScheme</code><span class="sig-paren">(</span><em>angle=120</em>, <em>mode='ryb'</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.TriadicScheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return two colors forming a triad or a split complementary with this one.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">angle:</th><td class="field-body">The angle between the hues of the created colors.
+The default value makes a triad.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">mode:</th><td class="field-body">Select which color wheel to use for the generation (ryb/rgb).</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A tuple of two grapefruit.Color forming a color triad with
+this one or a split complementary.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="p">,</span> <span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span><span class="o">.</span><span class="n">TriadicScheme</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;rgb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(150.0, 1, 0.5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c3</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(270.0, 1, 0.5)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="p">,</span> <span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span><span class="o">.</span><span class="n">TriadicScheme</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;rgb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(190.0, 1, 0.5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c3</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(230.0, 1, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.TetradicScheme">
+<code class="descclassname">Color.</code><code class="descname">TetradicScheme</code><span class="sig-paren">(</span><em>angle=30</em>, <em>mode='ryb'</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.TetradicScheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return three colors froming a tetrad with this one.</p>
+<dl class="docutils">
+<dt>Parameters:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">angle:</th><td class="field-body">The angle to substract from the adjacent colors hues [-90...90].
+You can use an angle of zero to generate a square tetrad.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">mode:</th><td class="field-body">Select which color wheel to use for the generation (ryb/rgb).</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A tuple of three grapefruit.Color forming a color tetrad with
+this one.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">col</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="p">[</span><span class="n">c</span><span class="o">.</span><span class="n">hsl</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">col</span><span class="o">.</span><span class="n">TetradicScheme</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s">&#39;rgb&#39;</span><span class="p">,</span> <span class="n">angle</span><span class="o">=</span><span class="mi">30</span><span class="p">)]</span>
+<span class="go">[(90, 1, 0.5), (210, 1, 0.5), (270, 1, 0.5)]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.AnalogousScheme">
+<code class="descclassname">Color.</code><code class="descname">AnalogousScheme</code><span class="sig-paren">(</span><em>angle=30</em>, <em>mode='ryb'</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.AnalogousScheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return two colors analogous to this one.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">angle:</th><td class="field-body">The angle between the hues of the created colors and this one.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">mode:</th><td class="field-body">Select which color wheel to use for the generation (ryb/rgb).</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A tuple of grapefruit.Colors analogous to this one.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromHsl</span><span class="p">(</span><span class="mi">30</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="p">,</span> <span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span><span class="o">.</span><span class="n">AnalogousScheme</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;rgb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(330, 1, 0.5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c3</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(90, 1, 0.5)</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="p">,</span> <span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span><span class="o">.</span><span class="n">AnalogousScheme</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s">&#39;rgb&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(20, 1, 0.5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c3</span><span class="o">.</span><span class="n">hsl</span>
+<span class="go">(40, 1, 0.5)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="blending-methods">
+<span id="id7"></span><h2>Blending methods<a class="headerlink" href="#blending-methods" title="Permalink to this headline">¶</a></h2>
+<dl class="method">
+<dt id="grapefruit.Color.AlphaBlend">
+<code class="descclassname">Color.</code><code class="descname">AlphaBlend</code><span class="sig-paren">(</span><em>other</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.AlphaBlend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alpha-blend this color on the other one.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">other:</th><td class="field-body">The grapefruit.Color to alpha-blend with this one.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance which is the result of alpha-blending
+this color on the other one.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span><span class="o">.</span><span class="n">AlphaBlend</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">c3</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.875, 0.75, 0.84)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="grapefruit.Color.Blend">
+<code class="descclassname">Color.</code><code class="descname">Blend</code><span class="sig-paren">(</span><em>other</em>, <em>percent=0.5</em><span class="sig-paren">)</span><a class="headerlink" href="#grapefruit.Color.Blend" title="Permalink to this definition">¶</a></dt>
+<dd><p>Blend this color with the other one.</p>
+<dl class="docutils">
+<dt>Args:</dt>
+<dd><table class="first last docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">other:</th><td class="field-body">the grapefruit.Color to blend with this one.</td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>Returns:</dt>
+<dd>A grapefruit.Color instance which is the result of blending
+this color on the other one.</dd>
+</dl>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">c1</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c2</span> <span class="o">=</span> <span class="n">Color</span><span class="o">.</span><span class="n">NewFromRgb</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span><span class="o">.</span><span class="n">Blend</span><span class="p">(</span><span class="n">c2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">str</span><span class="p">(</span><span class="n">c3</span><span class="p">)</span>
+<span class="go">&#39;(1, 0.75, 0.5, 0.4)&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">The Color class</a><ul>
+<li><a class="reference internal" href="#class-content">Class content</a></li>
+<li><a class="reference internal" href="#example-usage">Example usage</a></li>
+<li><a class="reference internal" href="#class-constants">Class Constants</a></li>
+<li><a class="reference internal" href="#conversion-functions">Conversion functions</a></li>
+<li><a class="reference internal" href="#instantiation-functions">Instantiation functions</a></li>
+<li><a class="reference internal" href="#properties">Properties</a></li>
+<li><a class="reference internal" href="#manipulation-methods">Manipulation methods</a></li>
+<li><a class="reference internal" href="#generation-methods">Generation methods</a></li>
+<li><a class="reference internal" href="#blending-methods">Blending methods</a></li>
+</ul>
+</li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2008, Xavier Basty <xbasty@gmail.com>.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.6</a>
+      
+      |
+      <a href="_sources/index.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
