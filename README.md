@@ -29,8 +29,8 @@ Download the latest grapefruit library from:
 
 Untar the source distribution and run::
 
-  $ python setup.py build
-  $ python setup.py install
+   $ python setup.py build
+   $ python setup.py install
 
 
 Testing
